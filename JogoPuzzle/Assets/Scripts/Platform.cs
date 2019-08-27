@@ -7,15 +7,12 @@ public class Platform : MonoBehaviour
     [SerializeField]
     float speed;
 
-    [SerializeField]
-    float timeValue;
-
     bool isRight;
 
     // Start is called before the first frame update
     void Start()
     {
-        this.AttachTimer(timeValue, switchDirection, isLooped: true);
+        
     }
 
     // Update is called once per frame
@@ -30,8 +27,9 @@ public class Platform : MonoBehaviour
         else transform.Translate(Vector3.left * speed * Time.deltaTime);
     }
 
-    void switchDirection()
+    private void OnCollisionEnter(Collision collision)
     {
-        isRight = !isRight;
+        if (collision.gameObject.CompareTag("Parede"))
+            isRight = !isRight;
     }
 }
