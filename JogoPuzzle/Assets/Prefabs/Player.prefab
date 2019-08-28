@@ -1064,8 +1064,10 @@ GameObject:
   m_Component:
   - component: {fileID: 985866180732500908}
   - component: {fileID: 7143979841593087702}
+  - component: {fileID: -5852768515492406246}
+  - component: {fileID: 390193875239549393}
   m_Layer: 0
-  m_Name: Elf_Mesh@Idle
+  m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1106,6 +1108,49 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &-5852768515492406246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4320598877078505919}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2571d4ea4973284ca9595b9d531621f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 2
+  walkSpeed: 3
+  runSpeed: 8
+  gravity: -12
+  jumpHeight: 5
+  velocityY: 0
+  running: 0
+  game_ref: {fileID: 0}
+  smoothRotationTime: 0.2
+  smoothSpeedTime: 0.2
+  cameraT: {fileID: 0}
+  charController: {fileID: 0}
+  animator: {fileID: 0}
+--- !u!143 &390193875239549393
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4320598877078505919}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4321096916369673646
 GameObject:
   m_ObjectHideFlags: 0
