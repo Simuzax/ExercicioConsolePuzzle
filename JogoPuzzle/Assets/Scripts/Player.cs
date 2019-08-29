@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class Player : MonoBehaviour
 {
@@ -40,6 +41,10 @@ public class Player : MonoBehaviour
     [SerializeField]
     private Animator animator;
 
+    public float playerHeight = 2;
+
+    public float slideDistance;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -49,10 +54,10 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        walkingRotating();  
+        walkRotating();  
     }
 
-    private void walkingRotating()
+    private void walkRotating()
     {
         Vector2 input = (new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized);
 
@@ -71,7 +76,10 @@ public class Player : MonoBehaviour
 
         Vector3 velocity = transform.forward * speed * input.magnitude + Vector3.up * velocityY;
 
-        charController.Move(velocity * Time.deltaTime);
+        if (!animator.GetBool("isSliding"))
+        {
+            charController.Move(velocity * Time.deltaTime);
+        }
 
         speed = new Vector2(charController.velocity.x, charController.velocity.z).magnitude;
 
@@ -88,6 +96,8 @@ public class Player : MonoBehaviour
         animator.SetBool("spaceDown", Input.GetKeyDown(KeyCode.Space));
 
         jump();
+
+        runningSlide();
     }
 
     private void jump()
@@ -104,6 +114,26 @@ public class Player : MonoBehaviour
                 float jumpVelocity = Mathf.Sqrt(-2 * gravity * jumpHeight);
 
                 velocityY = jumpVelocity;
+            }
+        }
+    }
+
+    private void runningSlide()
+    {
+        if (Input.GetKeyDown(KeyCode.C) && animator.GetBool("isSliding") == false && running)
+        {
+            if (charController.isGrounded == true)
+            {
+                GetComponent<CharacterController>().Move(Vector3.zero);
+
+                transform.DOMove(transform.forward * slideDistance, 1.5f).OnComplete(() => 
+                { GetComponent<CharacterController>().height = playerHeight;
+                    animator.SetBool("isSliding", false);
+                });
+
+                GetComponent<CharacterController>().height = GetComponent<CharacterController>().height / 2;
+
+                animator.SetBool("isSliding", true);
             }
         }
     }

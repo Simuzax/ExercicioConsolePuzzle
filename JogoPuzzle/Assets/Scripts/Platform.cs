@@ -7,7 +7,7 @@ public class Platform : MonoBehaviour
     [SerializeField]
     float speed;
 
-    bool isRight;
+    bool isGoingRight;
 
     // Start is called before the first frame update
     void Start()
@@ -23,13 +23,13 @@ public class Platform : MonoBehaviour
 
     void move()
     {
-        if (isRight) transform.Translate(Vector3.right * speed * Time.deltaTime);
+        if (isGoingRight) transform.Translate(Vector3.right * speed * Time.deltaTime);
         else transform.Translate(Vector3.left * speed * Time.deltaTime);
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Parede"))
-            isRight = !isRight;
+            isGoingRight = !isGoingRight;
     }
 }
