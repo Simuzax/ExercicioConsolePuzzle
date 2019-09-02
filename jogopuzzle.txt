@@ -1,10 +1,6 @@
-no talking
-ambient sounds
-mysteryous
-big trapdoor with 4 slots(keys)
-4 rooms, one for each element
-story fragments after each key gotten
+f r : torches and fireballs (water canteen)
+w r : manipulate waterflow (flower(?))
+e r : suspended ropes above abyss ()
+a r : guided airflow (flint and steel)
 
-------------
-
-water drop, vegetation
+must be done in order
