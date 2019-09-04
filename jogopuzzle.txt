@@ -1,4 +1,4 @@
-f r : torches and fireballs (water canteen)
+f r : parkour (water canteen)
 w r : manipulate waterflow (flower(?))
 e r : suspended ropes above abyss ()
 a r : guided airflow (flint and steel)
