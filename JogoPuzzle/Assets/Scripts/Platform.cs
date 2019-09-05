@@ -32,9 +32,13 @@ public class Platform : MonoBehaviour
     [SerializeField]
     bool useGlobalOrientation;
 
+    public Vector3 lastPos, deltaPos;
+
     // Start is called before the first frame update
     void Start()
     {
+        lastPos = transform.position;
+
         if (useGlobalOrientation)
         {
             switch (direção)
@@ -88,7 +92,9 @@ public class Platform : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        deltaPos = transform.position - lastPos;
 
+        lastPos = transform.position;
     }
 
     void move(bool inverse, Vector3 direction)

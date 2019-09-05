@@ -120,7 +120,7 @@ public class Player : MonoBehaviour
 
     private void runningSlide()
     {
-        if (Input.GetKeyDown(KeyCode.C) && animator.GetBool("isSliding") == false && running)
+        if (Input.GetKeyDown(KeyCode.C) && running && animator.GetBool("isSliding") == false)
         {
             if (charController.isGrounded == true)
             {
