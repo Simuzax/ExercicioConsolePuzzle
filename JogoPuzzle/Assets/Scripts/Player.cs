@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using DG.Tweening;
 using UnityEngine;
-using DG.Tweening;
 
 public class Player : MonoBehaviour
 {
@@ -44,40 +42,52 @@ public class Player : MonoBehaviour
     public float playerHeight = 2;
 
     public float slideDistance;
+    public float slideDuration;
+    public float slideSpeed;
+
+    [SerializeField]
+    private Vector2 input;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        
+        cameraT = Camera.main.transform;
+        charController = GetComponent<CharacterController>();
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        walkRotating();  
+        walkRotating();
     }
 
     private void walkRotating()
     {
-        Vector2 input = (new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized);
-
-        float targetRotation = Mathf.Atan2(input.x, input.y) * Mathf.Rad2Deg + cameraT.eulerAngles.y;
-
-        if (input != Vector2.zero)
-            transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref smoothRotationVelocity, smoothRotationTime);
-
-        running = (Input.GetKey(KeyCode.LeftShift));
-
-        float targetSpeed = (running) ? runSpeed : walkSpeed * input.magnitude;
-
-        speed = Mathf.SmoothDamp(speed, targetSpeed, ref smoothSpeedVelocity, smoothSpeedTime);
+        Vector3 velocity = Vector3.zero;
 
         velocityY += gravity * Time.deltaTime;
 
-        Vector3 velocity = transform.forward * speed * input.magnitude + Vector3.up * velocityY;
-
         if (!animator.GetBool("isSliding"))
         {
+            input = (new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized);
+
+            float targetRotation = Mathf.Atan2(input.x, input.y) * Mathf.Rad2Deg + cameraT.eulerAngles.y;
+
+            if (input != Vector2.zero)
+                transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref smoothRotationVelocity, smoothRotationTime);
+
+            running = (Input.GetKey(KeyCode.LeftShift));
+
+            float targetSpeed = (running) ? runSpeed : walkSpeed;
+
+            speed = Mathf.SmoothDamp(speed, targetSpeed, ref smoothSpeedVelocity, smoothSpeedTime);
+
+            velocity = transform.forward * speed * input.magnitude + Vector3.up * velocityY;
+            charController.Move(velocity * Time.deltaTime);
+        }
+        else
+        {
+            velocity = transform.forward * slideSpeed + Vector3.up * velocityY;
             charController.Move(velocity * Time.deltaTime);
         }
 
@@ -126,12 +136,13 @@ public class Player : MonoBehaviour
             {
                 GetComponent<CharacterController>().Move(Vector3.zero);
 
-                transform.DOMove(transform.forward * slideDistance, 1.5f).OnComplete(() => 
-                { GetComponent<CharacterController>().height = playerHeight;
+                transform.DOMove(transform.forward * slideDistance, slideDuration).OnComplete(() =>
+                {
+                    GetComponent<CharacterController>().height = playerHeight;
                     animator.SetBool("isSliding", false);
                 });
 
-                GetComponent<CharacterController>().height = GetComponent<CharacterController>().height / 2;
+                GetComponent<CharacterController>().height /= 2;
 
                 animator.SetBool("isSliding", true);
             }

@@ -1,20 +1,18 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using DG.Tweening;
 using UnityEngine;
-using DG.Tweening;
 
 public class Platform : MonoBehaviour
 {
     [SerializeField]
-    float distance;
+    private float distance;
 
     [SerializeField]
-    float timeToMove;
+    private float timeToMove;
 
     [SerializeField]
-    float waitTime;
+    private float waitTime;
 
-    enum Directions
+    private enum Directions
     {
         Up,
         Down,
@@ -25,17 +23,17 @@ public class Platform : MonoBehaviour
     }
 
     [SerializeField]
-    Directions direção;
+    private Directions direção;
 
-    bool invertDirection;
+    private bool invertDirection;
 
     [SerializeField]
-    bool useGlobalOrientation;
+    private bool useGlobalOrientation;
 
     public Vector3 lastPos, deltaPos;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         lastPos = transform.position;
 
@@ -46,18 +44,23 @@ public class Platform : MonoBehaviour
                 case Directions.Up:
                     move(invertDirection, Vector3.up);
                     break;
+
                 case Directions.Down:
                     move(invertDirection, Vector3.down);
                     break;
+
                 case Directions.Left:
                     move(invertDirection, Vector3.left);
                     break;
+
                 case Directions.Right:
                     move(invertDirection, Vector3.right);
                     break;
+
                 case Directions.Forward:
                     move(invertDirection, Vector3.forward);
                     break;
+
                 case Directions.Backward:
                     move(invertDirection, Vector3.back);
                     break;
@@ -70,18 +73,23 @@ public class Platform : MonoBehaviour
                 case Directions.Up:
                     move(invertDirection, transform.up);
                     break;
+
                 case Directions.Down:
                     move(invertDirection, -transform.up);
                     break;
+
                 case Directions.Left:
                     move(invertDirection, -transform.right);
                     break;
+
                 case Directions.Right:
                     move(invertDirection, transform.right);
                     break;
+
                 case Directions.Forward:
                     move(invertDirection, transform.forward);
                     break;
+
                 case Directions.Backward:
                     move(invertDirection, -transform.forward);
                     break;
@@ -90,14 +98,14 @@ public class Platform : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         deltaPos = transform.position - lastPos;
 
         lastPos = transform.position;
     }
 
-    void move(bool inverse, Vector3 direction)
+    private void move(bool inverse, Vector3 direction)
     {
         if (inverse)
         {

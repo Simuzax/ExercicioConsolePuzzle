@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlatformAttach : MonoBehaviour
 {
@@ -10,7 +8,7 @@ public class PlatformAttach : MonoBehaviour
     [SerializeField]
     private Platform platform;
 
-    bool isOnPlatform;
+    private bool isOnPlatform;
 
     private void LateUpdate()
     {
@@ -29,9 +27,8 @@ public class PlatformAttach : MonoBehaviour
         }
     }
 
-    void OnTriggerExit(Collider other)
+    private void OnTriggerExit(Collider other)
     {
-
         if (other.gameObject == player.gameObject)
         {
             player.gravity = -12;
