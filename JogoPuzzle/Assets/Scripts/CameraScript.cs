@@ -32,7 +32,7 @@ public class CameraScript : MonoBehaviour
     private Vector3 rotationSmoothVelocity;
 
     [SerializeField]
-    private Transform target; // rotacionar em volta de um alvo, no caso o player
+    private Transform target;
 
     [SerializeField]
     private LayerMask cameraLayerMask;
@@ -42,45 +42,39 @@ public class CameraScript : MonoBehaviour
     {
         if (lockCursor)
         {
-            //trava o cursor no centro da tela
             Cursor.lockState = CursorLockMode.Locked;
-            // deixa o cursor invisivel
+            
             Cursor.visible = false;
         }
-
-        // transform.eulerAngles = target.eulerAngles;
     }
 
     // Update is called once per frame
     private void LateUpdate()
     {
-        // input do mouse
         yaw += Input.GetAxis("Mouse X") * mouseSensitivity;
         pitch -= Input.GetAxis("Mouse Y") * mouseSensitivity;
-        //limita a rotacao no y
+        
         pitch = Mathf.Clamp(pitch, pitchMin, pitchMax);
 
         Vector3 targetRotation = new Vector3(pitch, yaw);
 
         currentRotation = Vector3.SmoothDamp(currentRotation, targetRotation, ref rotationSmoothVelocity, rotationSmoothTime);
-        //fazemos a rotação
+        
         transform.eulerAngles = currentRotation;
 
-        // colocamos a camera numa posicao logo atras do jogador
         transform.position = target.position - transform.forward * distanceFromTargetX + transform.up * distanceFromTargetY;
 
-        CheckWall();
+        checkWall();
     }
 
-    private void CheckWall()
+    private void checkWall()
     {
         RaycastHit hit;
-        // inicio do raio
+        
         Vector3 raystart = target.position;
-        //direção da posição
+        
         Vector3 dir = (transform.position - target.position).normalized;
 
-        //distancia do raio ( que é a distancia do player até a camera
         float dist = Vector3.Distance(transform.position, target.position);
 
         if (Physics.Raycast(raystart, dir, out hit, dist, cameraLayerMask))

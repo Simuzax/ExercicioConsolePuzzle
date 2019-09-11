@@ -30,7 +30,6 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float smoothSpeedTime = 0.2f;
 
-    [SerializeField]
     private Transform cameraT;
 
     [SerializeField]
@@ -48,17 +47,30 @@ public class Player : MonoBehaviour
     [SerializeField]
     private Vector2 input;
 
+    GameObject fruitBeingHolded;
+
+    [SerializeField]
+    float throwIntensity;
+
+    [SerializeField]
+    Transform cameraTarget;
+
     // Start is called before the first frame update
     private void Start()
     {
         cameraT = Camera.main.transform;
+
         charController = GetComponent<CharacterController>();
+
+        fruitBeingHolded = null;
     }
 
     // Update is called once per frame
     private void Update()
     {
         walkRotating();
+
+        if (Input.GetKeyDown(KeyCode.F)) throwFruit();
     }
 
     private void walkRotating()
@@ -145,6 +157,52 @@ public class Player : MonoBehaviour
                 GetComponent<CharacterController>().height /= 2;
 
                 animator.SetBool("isSliding", true);
+            }
+        }
+    }
+
+    void grabFruit(GameObject f)
+    {
+        if (fruitBeingHolded != null) return;
+
+        fruitBeingHolded = f;
+
+        if (fruitBeingHolded.GetComponent<Rigidbody>())
+        {
+            Destroy(fruitBeingHolded.GetComponent<Rigidbody>());
+        }
+
+        f.transform.parent = cameraTarget;
+
+        f.transform.localPosition = Vector3.zero;
+
+        f.transform.localPosition += transform.forward * 1;
+    }
+
+    void throwFruit()
+    {
+        if (fruitBeingHolded == null) return;
+
+        fruitBeingHolded.AddComponent<Rigidbody>();
+
+        fruitBeingHolded.GetComponent<Rigidbody>().useGravity = true;
+
+        Vector3 point = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, Camera.main.nearClipPlane));
+
+        Vector3 direction = (point - transform.position).normalized;
+
+        fruitBeingHolded.transform.parent = null;
+
+        fruitBeingHolded.GetComponent<Rigidbody>().AddForce(direction * throwIntensity);
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.transform.CompareTag("Fruit"))
+        {
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                grabFruit(other.transform.parent.gameObject);
             }
         }
     }
